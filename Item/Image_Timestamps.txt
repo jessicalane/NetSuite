@@ -1,0 +1,24 @@
+/**
+ *@NApiVersion 2.x
+ *@NScriptType ClientScript
+ */
+define(['N/record'], function(record) {
+
+    function pageInit(context) {
+
+        var rec = context.currentRecord;
+        var caseLabelImage = rec.getValue('custitem_case_label');
+
+        log.debug('case image value', caseLabelImage)
+
+        //custitem_caselabeltimestamp
+        //custitem_case_label
+
+
+    }
+
+
+    return {
+        pageInit: pageInit
+    }
+});
