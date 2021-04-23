@@ -557,6 +557,8 @@ define(['N/record', 'N/search'], function(record, search) {
 
         if (form == "182") {return;}
 
+
+
         log.debug('triggered', 'triggered aftersubmit')
 
         var recLoad = record.load({
