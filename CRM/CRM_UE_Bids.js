@@ -7,15 +7,9 @@ define(['N/record', 'N/ui/serverWidget'], function(record, serverWidget) {
 
     function beforeLoad(context) {
         var rec = context.newRecord;
-        var sub = rec.getSublist({
-            sublistId: 'item'
-        });
-        var column = sub.getSublistField({
-            id: 'amount'
-        });
-        column.updateDisplayType({
-            displayType: serverWidget.FieldDisplayType.HIDDEN
-        })
+        context.form.getSublist('item').getField('amount').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
+
+
     }
 
     // function beforeSubmit(context) {
