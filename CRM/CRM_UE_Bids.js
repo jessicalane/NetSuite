@@ -7,6 +7,10 @@ define(['N/record', 'N/ui/serverWidget'], function(record, serverWidget) {
 
     function beforeLoad(context) {
         var rec = context.newRecord;
+        var form = rec.getValue('customform');
+
+        if (form != '182') {return;}
+        
         context.form.getSublist('item').getField('amount').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
 
 

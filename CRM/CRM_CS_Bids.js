@@ -4,9 +4,13 @@
  *@CreatedBy Jessica Lane | 2021
  */
 
-define([], function() {
+define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
 
     function pageInit(context) {
+
+        search.create({
+            
+        })
 
     }
 
