@@ -12,41 +12,78 @@ define(['N/search', 'N/record'], function(search, record) {
 
         if (context.type == context.UserEventType.DELETE) {return;}
 
-        search.create({
-            type: 'customer',
-            filters: [
-                ['internalid', 'anyof', customer]
-            ],
-            columns: [
-                search.createColumn({name: 'custentity_sscclabelsneeded', label: 'SSCC Labels Needed'})
-            ]
-        }).run().each(function(result) {
-            //TODO If SSCC labels are needed, generate SSCC. Store last number in a Last Used Number custom record (SSCC Serial Reference field).
-            if (result.getValue('custentity_sscclabelsneeded') == true) {
+        var customerLookUp = search.lookupFields({
+            type: search.Type.CUSTOMER,
+            id: customer,
+            columns: ['custentity_sscclabelsneeded']
+        });
 
-                //TODO create search to find last number used for SSCC Serial Reference.
-                search.create({
-                    type: 'customrecord_lastnumberused',
-                    filters: [],
-                    columns: [
-                        search.createColumn({name: 'internalid', summary: 'MAX'}),
-                        //is following data necessary?
-                        search.createColumn({name: 'custrecord_ssccserialreference', summary: 'MAX'})
-                    ]
-                }).run().each(function(result) {
-                    var lastNumberID = result.getValue('internalid');
+        if (customerLookup['custentity_sscclabelsneeded'] == true) {
 
-                    var lastNumber = record.load({
-                        type: 'customrecord_lastnumberused',
-                        id: lastNumberID,
-                        isDynamic: true
-                    });
+            var pallets = rec.getValue('custbody_total_pallets_rounded');
 
-                    var ssccLastNumber = lastNumber.getValue('custrecord_ssccserailreference');
-                    var ssccNewNumber = (Number(ssccLastNumber) + 1).toString().padStart(7, '0');
-                })
+            var ssccSerialLookUp = search.lookupFields({
+                type: 'customrecord_script_lookups',
+                id: 5, //5 is the internalid of sscc serial
+                columns: ['custrecord_fft_field']
+            })
+
+            for (i = 0; i <= pallets; i++) {
+                
             }
-        })
+
+        }
+
+
+
+            // if (result.getValue('custentity_sscclabelsneeded') == true) {
+
+            //     search.create({
+            //         type: 'customrecord_script_lookups',
+            //         filters: [
+            //             ['internalid', 'anyof', '5']
+            //         ],
+            //         columns: [
+            //             search.createColumn({'custrecord_fft_field'})
+            //         ]
+            //     }).run().each(function(result) {
+
+            //         var ssccLastSerial = result.getValue('custrecord_fft_field');
+            //         //TODO Generate Check Digit
+            //         var checkDigit = '4'
+
+            //         //TODO create GS1 per # of pallets
+            //         var pallets = rec.getValue('custbody_total_pallets_rounded');
+
+            //         if (pallets == 1) {
+            //             rec.setValue({
+            //                 fieldId: 'custbody_gs1128numbers',
+            //                 value: '(00)0185043000' + ssccLastSerial + checkDigit
+            //             })
+            //         } 
+            //         // else {
+
+            //         // }
+
+            //         var ssccNewSerial = (Number(ssccLastSerial) + 1).toString().padStart(7, '0');
+
+            //         var scriptLookup = record.load({
+            //             type: 'customrecord_script_lookups',
+            //             id: 5,
+            //             isDynamic: true
+            //         });
+
+            //         scriptLookup.setValue({
+            //             name: 'custrecord_fft_field',
+            //             value: ssccNewSerial
+            //         });
+
+            //         scriptLookup.save();
+
+
+            //     })
+            // }
+        // })
         
 
     }
