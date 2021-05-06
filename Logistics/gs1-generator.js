@@ -9,7 +9,7 @@ define(['N/search', 'N/record'], function(search, record) {
     function beforeSubmit(context) {
         var rec = context.newRecord;
 
-        //TODO If deleting, exit script;
+        if (context.type == context.UserEventType.DELETE) {return;}
 
         //TODO search customer record to see if SSCC Labels are needed
         
