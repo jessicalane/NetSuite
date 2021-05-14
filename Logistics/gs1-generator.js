@@ -34,11 +34,10 @@ define(['N/search', 'N/record'], function(search, record) {
                     fieldId: 'custcol_sscclabels',
                     line: i
                 });
-                log.debug('Line SSCC', ssccLine);
 
                 if (!ssccLine) {
                     
-                    
+                    var sscc = generateSSCC();
                     
                 }
             }
@@ -47,12 +46,42 @@ define(['N/search', 'N/record'], function(search, record) {
    
     }
 
-    function generateSSCC() {
+    function generateSSCC(number) {
         
-        //TODO generate SSCC
-        var sscc = '0' + '185043000';
+        var extDigit = '0';
+        var compPrefix = '185043000';
+        var serialRef = getSerialRef();
+
+        var checkDigitRef = Number(extDigit + compPrefix + serialRef);
+
+        var checkDigit = checkDigit(checkDigitRef);
+
+
+
+        return extDigit + compPrefix + serialRef + checkDigit;
 
     }
+
+    function getSerialRef() {
+        return '1234'
+    }
+
+    function checkDigit(checkDigitRef) {
+
+        var num = checkDigitRef;
+        var numberArray = [...num+''].map(n=>+n);
+
+        for (i = 0; i < numberArray.length; i ++) {
+            if (i % 2 == 0) {
+                //TODO expand this out more
+                numberArray[i] * 3;
+            } else {
+                numberArray[i];
+            }
+        }
+
+    }
+
 
     return {
         beforeSubmit: beforeSubmit
