@@ -37,8 +37,8 @@ define(['N/search', 'N/record'], function(search, record) {
 
                 if (!ssccLine) {
                     
-                    var sscc = generateSSCC();
-                    log.debug('sscc', sscc);
+                    var sscc = generateSSCC(pallets);
+                    break;
                     
                 }
             }
@@ -47,10 +47,14 @@ define(['N/search', 'N/record'], function(search, record) {
    
     }
 
-    function generateSSCC(number) {
+    function generateSSCC(pallets) {
+
+        //TODO: Use pallets variable to only run sscc generation x # of pallets. Store the values in an array. Push that array back to the beforeSubmit. Assign to lines as needed.
         
         //TODO: Make the extDigit part of the custom record so that it will cycle through to 9, then alert team to get a new compPrefix;
         var extDigit = '0';
+
+        //TODO: Make the compPrefix part of the custom record for future updates.
         var compPrefix = '185043000';
         var serialRef = getSerialRef();
         log.debug('serialRef', serialRef);
@@ -65,7 +69,14 @@ define(['N/search', 'N/record'], function(search, record) {
     }
 
     function getSerialRef() {
-        return '1234567'
+        
+        var lastSerialRefLookup = search.lookupFields({
+            type: 'customrecord_script_lookups',
+            id: 5,
+            columns: ['custrecord_fft_field']
+        });
+        
+        return lastSerialRefLookup.custrecord_fft_field;
     }
 
     function checkDigitCreator(checkDigitRef) {
@@ -92,12 +103,12 @@ define(['N/search', 'N/record'], function(search, record) {
             }
         }
 
-        var checkDigitSum = sumArray.reduce((a,b) => a+b, 0);
+        var checkDigitSum = sumArray.reduce((a, b) => a + b, 0);
         log.debug('checkdigitsum', checkDigitSum);
-        var rounded = Math.ceil(checkDigitSum/10)*10;
+        var rounded = Math.ceil(checkDigitSum / 10) * 10;
         log.debug('rounded', rounded);
 
-        log.debug('return', rounded - checkDigitSum)
+        log.debug('return', rounded - checkDigitSum);
 
         return rounded - checkDigitSum;
 
