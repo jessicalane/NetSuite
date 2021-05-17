@@ -38,6 +38,7 @@ define(['N/search', 'N/record'], function(search, record) {
                 if (!ssccLine) {
                     
                     var sscc = generateSSCC();
+                    log.debug('sscc', sscc);
                     
                 }
             }
@@ -48,37 +49,58 @@ define(['N/search', 'N/record'], function(search, record) {
 
     function generateSSCC(number) {
         
+        //TODO: Make the extDigit part of the custom record so that it will cycle through to 9, then alert team to get a new compPrefix;
         var extDigit = '0';
         var compPrefix = '185043000';
         var serialRef = getSerialRef();
+        log.debug('serialRef', serialRef);
 
-        var checkDigitRef = Number(extDigit + compPrefix + serialRef);
+        var checkDigitRef = extDigit + compPrefix + serialRef;
+        log.debug('checkdigitref', checkDigitRef)
 
-        var checkDigit = checkDigit(checkDigitRef);
-
-
+        var checkDigit = checkDigitCreator(checkDigitRef);
 
         return extDigit + compPrefix + serialRef + checkDigit;
 
     }
 
     function getSerialRef() {
-        return '1234'
+        return '1234567'
     }
 
-    function checkDigit(checkDigitRef) {
+    function checkDigitCreator(checkDigitRef) {
+
+        //Instructions for manually calculating a check digit can be found here: https://www.gs1.org/services/how-calculate-check-digit-manually
+        //Recreated into script below.
 
         var num = checkDigitRef;
         var numberArray = [...num+''].map(n=>+n);
+        var sumArray = [];
+
+        log.debug('num', num);
+        log.debug('numberArray', numberArray);
 
         for (i = 0; i < numberArray.length; i ++) {
             if (i % 2 == 0) {
-                //TODO expand this out more
-                numberArray[i] * 3;
+
+                var val = numberArray[i] * 3;
+                sumArray.push(val);
+
             } else {
-                numberArray[i];
+                var val = numberArray[i];
+                sumArray.push(val);
             }
         }
+
+        var checkDigitSum = sumArray.reduce((a,b) => a+b, 0);
+        log.debug('checkdigitsum', checkDigitSum);
+        var rounded = Math.ceil(checkDigitSum/10)*10;
+        log.debug('rounded', rounded);
+
+        log.debug('return', rounded - checkDigitSum)
+
+        return rounded - checkDigitSum;
+
 
     }
 
