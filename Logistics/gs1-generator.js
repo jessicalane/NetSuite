@@ -15,8 +15,6 @@ define(['N/search', 'N/record'], function(search, record) {
         if (context.type == context.UserEventType.DELETE) {return;}
         if (context.type == context.UserEventType.CREATE) {return;}
 
-
-
         var customerLookUp = search.lookupFields({
             type: search.Type.CUSTOMER,
             id: customer,
@@ -36,8 +34,19 @@ define(['N/search', 'N/record'], function(search, record) {
                 });
 
                 if (!ssccLine) {
+
+                    //TODO: loop through # of pallets
+
+                    var ssccArray = [];
+
+                    for (j = 0; j < pallets; j++){
+                        var sscc = generateSSCC();
+                        ssccArray.push(sscc);
+
+                    }
                     
-                    var sscc = generateSSCC(pallets);
+                    log.debug('ssccArray', ssccArray);
+                    
                     break;
                     
                 }
@@ -47,24 +56,23 @@ define(['N/search', 'N/record'], function(search, record) {
    
     }
 
-    function generateSSCC(pallets) {
+    function generateSSCC() {
 
         //TODO: Use pallets variable to only run sscc generation x # of pallets. Store the values in an array. Push that array back to the beforeSubmit. Assign to lines as needed.
         
         //TODO: Make the extDigit part of the custom record so that it will cycle through to 9, then alert team to get a new compPrefix;
+        var appIdentifier = '00'
         var extDigit = '0';
 
         //TODO: Make the compPrefix part of the custom record for future updates.
         var compPrefix = '185043000';
         var serialRef = getSerialRef();
-        log.debug('serialRef', serialRef);
 
         var checkDigitRef = extDigit + compPrefix + serialRef;
-        log.debug('checkdigitref', checkDigitRef)
 
         var checkDigit = checkDigitCreator(checkDigitRef);
 
-        return extDigit + compPrefix + serialRef + checkDigit;
+        return appIdentifier + extDigit + compPrefix + serialRef + checkDigit;
 
     }
 
@@ -75,8 +83,20 @@ define(['N/search', 'N/record'], function(search, record) {
             id: 5,
             columns: ['custrecord_fft_field']
         });
+
+        var lastSerial = lastSerialRefLookup.custrecord_fft_field;
+        var newSerial = (Number(lastSerial) + 1).toString().padStart(7, '0');
+
+        record.load({
+            type: 'customrecord_script_lookups',
+            id: 5,
+            isDynamic: true
+        }).setValue({
+            fieldId: 'custrecord_fft_field',
+            value: newSerial
+        }).save();
         
-        return lastSerialRefLookup.custrecord_fft_field;
+        return lastSerial;
     }
 
     function checkDigitCreator(checkDigitRef) {
@@ -87,9 +107,6 @@ define(['N/search', 'N/record'], function(search, record) {
         var num = checkDigitRef;
         var numberArray = [...num+''].map(n=>+n);
         var sumArray = [];
-
-        log.debug('num', num);
-        log.debug('numberArray', numberArray);
 
         for (i = 0; i < numberArray.length; i ++) {
             if (i % 2 == 0) {
@@ -104,14 +121,9 @@ define(['N/search', 'N/record'], function(search, record) {
         }
 
         var checkDigitSum = sumArray.reduce((a, b) => a + b, 0);
-        log.debug('checkdigitsum', checkDigitSum);
         var rounded = Math.ceil(checkDigitSum / 10) * 10;
-        log.debug('rounded', rounded);
-
-        log.debug('return', rounded - checkDigitSum);
 
         return rounded - checkDigitSum;
-
 
     }
 
