@@ -5,7 +5,7 @@
  */
 define(['N/search', 'N/record'], function(search, record) {
 
-    //TODO Rework to put at the item level. Divide if multiple.
+    //TODO lIST: only trigger upon proper SO Stage change; 
 
     function beforeSubmit(context) {
         var rec = context.newRecord;
@@ -48,6 +48,7 @@ define(['N/search', 'N/record'], function(search, record) {
                         for (k = 0; k < lines; k++) {
                             seqArray.push(order[k]);
                         }
+
 
                     }
 
