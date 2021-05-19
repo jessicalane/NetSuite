@@ -7,7 +7,6 @@ define(['N/search', 'N/record'], function(search, record) {
 
     //TODO Rework to put at the item level. Divide if multiple.
 
-
     function beforeSubmit(context) {
         var rec = context.newRecord;
         var customer = rec.getValue('entity');
@@ -35,17 +34,42 @@ define(['N/search', 'N/record'], function(search, record) {
 
                 if (!ssccLine) {
 
-                    //TODO: loop through # of pallets
+                    let seqArray = [];
+
+                    if (lines > pallets) {
+                        //Create array sequence for looping through ssccArray values
+
+                        let order = Array.from({length:pallets}, (a,index) => index);
+
+                        while (order.length < lines) {
+                            order = order.concat(order);
+                        }
+
+                        for (k = 0; k < lines; k++) {
+                            seqArray.push(order[k]);
+                        }
+
+                    }
 
                     var ssccArray = [];
-
+                    
                     for (j = 0; j < pallets; j++){
                         var sscc = generateSSCC();
+
                         ssccArray.push(sscc);
 
                     }
                     
                     log.debug('ssccArray', ssccArray);
+
+                    for (l = 0; l < lines; l++) {
+                        rec.setSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'custcol_sscclabels',
+                            line: l,
+                            value: ssccArray[seqArray[l]]
+                        });
+                    }
                     
                     break;
                     
