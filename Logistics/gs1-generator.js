@@ -22,46 +22,48 @@ define(['N/search', 'N/record'], function(search, record) {
 
         if (customerLookUp.custentity_sscclabelsneeded == true) {
 
-            var lines = rec.getLineCount('item');
-            var pallets = rec.getValue('custbody_total_pallets_rounded');
+            ssccLabels(rec);
 
-            for (i = 0; i < lines; i++){
-                var ssccLine = rec.getSublistValue({
-                    sublistId: 'item',
-                    fieldId: 'custcol_sscclabels',
-                    line: i
-                });
+        }
+   
+    }
 
-                if (!ssccLine) {
+    function ssccLabels(rec) {
 
-                    let seqArray = [];
+        var lines = rec.getLineCount('item');
+        var pallets = rec.getValue('custbody_total_pallets_rounded');
 
-                    if (lines > pallets) {
-                        //Create array sequence for looping through ssccArray values
+        for (i = 0; i < lines; i++){
+            var ssccLine = rec.getSublistValue({
+                sublistId: 'item',
+                fieldId: 'custcol_sscclabels',
+                line: i
+            });
 
-                        let order = Array.from({length:pallets}, (a,index) => index);
+            if (!ssccLine) {
 
-                        while (order.length < lines) {
-                            order = order.concat(order);
-                        }
+                let seqArray = [];
+                let ssccArray = [];
 
-                        for (k = 0; k < lines; k++) {
-                            seqArray.push(order[k]);
-                        }
+                for (j = 0; j < pallets; j++){
+                    
+                    var sscc = generateSSCC();
 
+                    ssccArray.push(sscc);
 
+                }
+
+                if (lines >= pallets) {
+
+                    let order = Array.from({length:pallets}, (a,index) => index);
+
+                    while (order.length < lines) {
+                        order = order.concat(order);
                     }
 
-                    var ssccArray = [];
-                    
-                    for (j = 0; j < pallets; j++){
-                        var sscc = generateSSCC();
-
-                        ssccArray.push(sscc);
-
+                    for (k = 0; k < lines; k++) {
+                        seqArray.push(order[k]);
                     }
-                    
-                    log.debug('ssccArray', ssccArray);
 
                     for (l = 0; l < lines; l++) {
                         rec.setSublistValue({
@@ -71,14 +73,49 @@ define(['N/search', 'N/record'], function(search, record) {
                             value: ssccArray[seqArray[l]]
                         });
                     }
-                    
-                    break;
-                    
-                }
-            }
 
+
+                } else {
+
+                    let order = Array.from({length:lines}, (a,index) => index);
+
+                    while (order.length < pallets) {
+                        order = order.concat(order);
+                    }
+
+                    for (k = 0; k < pallets; k++) {
+                        seqArray.push(order[k]);
+                    }
+
+                    for (l = 0; l < pallets; l++) {
+
+                        var currSSCC = rec.getSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'custcol_sscclabels',
+                            line: order[l]
+                        });
+
+                        if (currSSCC) {
+                            var ssccVal = currSSCC + ', ' + ssccArray[l];
+                        } else {
+                            var ssccVal = ssccArray[l]
+                        }
+
+                        rec.setSublistValue({
+                            sublistId: 'item',
+                            fieldId: 'custcol_sscclabels',
+                            line: order[l],
+                            value: ssccVal
+                        });
+
+                    }
+
+                }
+                
+                break;
+                
+            }
         }
-   
     }
 
     function generateSSCC() {
