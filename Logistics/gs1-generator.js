@@ -5,11 +5,13 @@
  */
 define(['N/search', 'N/record'], function(search, record) {
 
-    //TODO lIST: only trigger upon proper SO Stage change; 
+    //TODO lIST: only trigger upon proper SO Stage change;
 
     function beforeSubmit(context) {
         var rec = context.newRecord;
         var customer = rec.getValue('entity');
+        var stage = rec.getValue('custbody_sostage');
+        var readyToSend = rec.getValue('custbody_ready_to_send_warehouse_edi');
 
         if (context.type == context.UserEventType.DELETE) {return;}
         if (context.type == context.UserEventType.CREATE) {return;}
@@ -20,7 +22,7 @@ define(['N/search', 'N/record'], function(search, record) {
             columns: ['custentity_sscclabelsneeded']
         });
 
-        if (customerLookUp.custentity_sscclabelsneeded == true) {
+        if (customerLookUp.custentity_sscclabelsneeded == true && (stage == '4' || stage = '3' || stage = '6' || readyToSend)) {
 
             ssccLabels(rec);
 
