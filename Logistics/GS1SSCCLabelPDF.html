@@ -1,0 +1,89 @@
+<?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
+<pdf>
+<head>
+	<link name="NotoSans" type="font" subtype="truetype" src="${nsfont.NotoSans_Regular}" src-bold="${nsfont.NotoSans_Bold}" src-italic="${nsfont.NotoSans_Italic}" src-bolditalic="${nsfont.NotoSans_BoldItalic}" bytes="2" />
+	<#if .locale == "zh_CN">
+		<link name="NotoSansCJKsc" type="font" subtype="opentype" src="${nsfont.NotoSansCJKsc_Regular}" src-bold="${nsfont.NotoSansCJKsc_Bold}" bytes="2" />
+	<#elseif .locale == "zh_TW">
+		<link name="NotoSansCJKtc" type="font" subtype="opentype" src="${nsfont.NotoSansCJKtc_Regular}" src-bold="${nsfont.NotoSansCJKtc_Bold}" bytes="2" />
+	<#elseif .locale == "ja_JP">
+		<link name="NotoSansCJKjp" type="font" subtype="opentype" src="${nsfont.NotoSansCJKjp_Regular}" src-bold="${nsfont.NotoSansCJKjp_Bold}" bytes="2" />
+	<#elseif .locale == "ko_KR">
+		<link name="NotoSansCJKkr" type="font" subtype="opentype" src="${nsfont.NotoSansCJKkr_Regular}" src-bold="${nsfont.NotoSansCJKkr_Bold}" bytes="2" />
+	<#elseif .locale == "th_TH">
+		<link name="NotoSansThai" type="font" subtype="opentype" src="${nsfont.NotoSansThai_Regular}" src-bold="${nsfont.NotoSansThai_Bold}" bytes="2" />
+	</#if>
+    <style type="text/css">
+        * {
+			font-family: NotoSans, sans-serif;
+            text-align: left;
+            font-size: 10pt;
+		}
+        table, td {
+            border: 1px solid black;
+        }
+		table {
+            page-break-inside:avoid;
+            align: right;
+			table-layout: fixed;
+            width: 4in;
+            height: 6in;
+            border-collapse: collapse;
+		}
+        tr {
+            width: 100%;
+        }
+        td {
+            padding: 4px 6px;
+        }
+		td p { 
+      	}
+        .po {
+            font-weight: bold;
+            font-size: 15pt;
+        }
+</style>
+</head>
+<body padding="0.5in 0.5in 0.5in 0.5in" size="Letter">
+
+    <#list record.custbody_gs1128numbers?split("-") as code>
+
+        <table>
+            <tr>
+                <td>
+                    <p>From:</p>
+                    <p>NATIONAL FOOD GROUP<br />${record.custbody_copy_loc_address}</p>
+                </td>
+                <td>
+                    <p>To:</p>
+                    <p>${record.shipaddress}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Ship to Postal Code:</p>
+
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p class="po">PO#: ${record.otherrefnum}</p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>GS1 UCC-128 (SSCC)</p>
+                    <p align="center">${code}</p>
+                    <barcode codetype="code128" value="${code}" />
+                </td>
+            </tr>
+        </table>
+
+    </#list>    
+
+</body>
+</pdf>

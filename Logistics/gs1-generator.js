@@ -22,7 +22,7 @@ define(['N/search', 'N/record'], function(search, record) {
             columns: ['custentity_sscclabelsneeded']
         });
 
-        if (customerLookUp.custentity_sscclabelsneeded == true && (stage == '4' || stage = '3' || stage = '6' || readyToSend)) {
+        if (customerLookUp.custentity_sscclabelsneeded == true && (stage == '4' || stage == '3' || stage == '6' || readyToSend)) {
 
             ssccLabels(rec);
 
@@ -54,6 +54,12 @@ define(['N/search', 'N/record'], function(search, record) {
                     ssccArray.push(sscc);
 
                 }
+
+                //Push the GS1-128 SSCC codes into a field for looping the shipping labels
+                rec.setValue({
+                    fieldId: 'custbody_gs1128numbers',
+                    value: ssccArray.join('-')
+                })
 
                 if (lines >= pallets) {
 
