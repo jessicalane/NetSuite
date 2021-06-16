@@ -19,9 +19,24 @@ define(['N/currentRecord'], function(currentRecord) {
         
     // }
 
-    // function fieldChanged(context) {
+    function fieldChanged(context) {
+
+        const rec = context.currentRecord;
+        let form = rec.getValue('customform');
+
+        if (form != '182') {return;}
+
+        //TODO Change this to a workflow?? Or remove hidden from UE script and put disabled into pageInit(on create) in this script.
+        if (context.fieldId == 'custbody_performanceclause') {
+            let perf = rec.getValue('custbody_performanceclause');
+
+            if (perf == '1') {
+                log.debug('test', rec.getField('custbody_performanceclausedetails').isDisabled);
+            }
+            
+        }
         
-    // }
+    }
 
     // function postSourcing(context) {
         
@@ -85,7 +100,7 @@ define(['N/currentRecord'], function(currentRecord) {
         //pageInit: pageInit,
         // saveRecord: saveRecord,
         // validateField: validateField,
-        // fieldChanged: fieldChanged,
+        fieldChanged: fieldChanged,
         // postSourcing: postSourcing,
         // lineInit: lineInit,
         // validateDelete: validateDelete,
