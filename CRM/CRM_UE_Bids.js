@@ -1,5 +1,5 @@
 /**
- *@NApiVersion 2.0
+ *@NApiVersion 2.1
  *@NScriptType UserEventScript
  *@CreatedBy Jessica Lane | 2021
  */

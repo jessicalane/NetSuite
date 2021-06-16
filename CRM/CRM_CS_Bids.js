@@ -1,18 +1,15 @@
 /**
- *@NApiVersion 2.0
+ *@NApiVersion 2.1
  *@NScriptType ClientScript
  *@CreatedBy Jessica Lane | 2021
  */
 
-define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
+define(['N/currentRecord'], function(currentRecord) {
 
-    function pageInit(context) {
+    // function pageInit(context) {
 
-        search.create({
-            
-        })
 
-    }
+    // }
 
     // function saveRecord(context) {
         
@@ -31,7 +28,7 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
     // }
 
     // function lineInit(context) {
-        
+
     // }
 
     // function validateDelete(context) {
@@ -42,16 +39,50 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
         
     // }
 
-    // function validateLine(context) {
-        
-    // }
+    function validateLine(context) {
+
+        const rec = context.currentRecord;
+        let form = rec.getValue('customform');
+
+        if (form != '182') {return;}
+
+        if (context.sublistId === 'item') {
+            rec.setCurrentSublistValue({
+                sublistId: 'item',
+                fieldId: 'amount',
+                value: 0,
+                ignoreFieldChange: true
+            });
+
+            return true;
+        }
+
+    }
 
     // function sublistChanged(context) {
         
+        // var rec = context.currentRecord;
+        // var form = rec.getValue('customform');
+
+        // if (form != '182') {return;}
+
+        // if (context.sublistId === 'item') {
+        //     log.debug('entering sublist', 'entering sublist')
+        //     rec.setCurrentSublistValue({
+        //         sublistId: 'item',
+        //         fieldId: 'amount',
+        //         value: 0,
+        //         ignoreFieldchange: true
+        //     });
+        //     rec.commitLine({
+        //         sublistId: 'item'
+        //     });
+        // }
+
     // }
 
     return {
-        pageInit: pageInit
+        //pageInit: pageInit,
         // saveRecord: saveRecord,
         // validateField: validateField,
         // fieldChanged: fieldChanged,
@@ -59,7 +90,7 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
         // lineInit: lineInit,
         // validateDelete: validateDelete,
         // validateInsert: validateInsert,
-        // validateLine: validateLine,
-        // sublistChanged: sublistChanged
+        validateLine: validateLine
+        //sublistChanged: sublistChanged
     }
 });
