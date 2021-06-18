@@ -8,6 +8,10 @@ define(['N/currentRecord'], function(currentRecord) {
 
     // function pageInit(context) {
 
+    //     var rec = currentRecord.get();
+    //     var form = rec.getValue('customform');
+
+    //     if (form != '182') {return;}
 
     // }
 
@@ -65,7 +69,7 @@ define(['N/currentRecord'], function(currentRecord) {
     // }
 
     return {
-        //pageInit: pageInit,
+        // pageInit: pageInit,
         // saveRecord: saveRecord,
         // validateField: validateField,
         //fieldChanged: fieldChanged,
