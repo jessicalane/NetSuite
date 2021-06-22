@@ -12,12 +12,11 @@ define(['N/record', 'N/ui/serverWidget', 'N/search'], function(record, serverWid
         if (form != '182') {return;}
         
         //Disable Amount column so Sales team cannot edit.
-        context.form.getSublist('item').getField('amount').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
-
-        rec.setValue({
-            fieldId: 'entitystatus',
-            value: '31'
-        });
+        var itemSublist = context.form.getSublist('item');
+        itemSublist.getField('amount').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
+        itemSublist.getField('custcol_primarybuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
+        itemSublist.getField('custcol_secondarybuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
+        itemSublist.getField('custcol_alternatebuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
 
     }
 
@@ -55,14 +54,29 @@ define(['N/record', 'N/ui/serverWidget', 'N/search'], function(record, serverWid
                 name: 'amount',
                 summary: 'SUM'
             });
-
             
         });
 
+        if (annualRev > 0) {
+            rec.setValue({
+                fieldId: 'custbody_annualcustomerrev',
+                value: annualRev
+            });
+        } else {
+            rec.setValue({
+                fieldId: 'custbody_annualcustomerrev',
+                value: 0
+            })
+        }
+        
+
+
+        //Set the Opportunity Status (native field) to 'Bid.' Put into beforeSubmit so that tied 'Probability' native field will set to correct value.
         rec.setValue({
-            fieldId: 'custbody_annualcustomerrev',
-            value: annualRev
+            fieldId: 'entitystatus',
+            value: '31'
         });
+
 
 
 
