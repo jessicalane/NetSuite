@@ -14,6 +14,7 @@ define(['N/record', 'N/ui/serverWidget', 'N/search'], function(record, serverWid
         //Disable Amount column so Sales team cannot edit.
         var itemSublist = context.form.getSublist('item');
         itemSublist.getField('amount').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
+        itemSublist.getField('custcol_pack_size').updateDisplayType({displayType: serverWidget.FieldDisplayType.NORMAL});
         itemSublist.getField('custcol_primarybuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
         itemSublist.getField('custcol_secondarybuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
         itemSublist.getField('custcol_alternatebuyer').updateDisplayType({displayType: serverWidget.FieldDisplayType.DISABLED});
@@ -25,6 +26,8 @@ define(['N/record', 'N/ui/serverWidget', 'N/search'], function(record, serverWid
         var rec = context.newRecord;
         var form = rec.getValue('customform');
         var customer = rec.getValue('entity');
+        var bidStatus = rec.getValue('custbody_bidstatus');
+        log.debug('bidstatus', bidStatus);
         var annualRev;
 
         //Exit script if form is not the NFG Bid Form.
@@ -77,7 +80,19 @@ define(['N/record', 'N/ui/serverWidget', 'N/search'], function(record, serverWid
             value: '31'
         });
 
+        
+        //if bid status=ready to convert, start conversion process
 
+        if (bidStatus == '4') {
+            var confirmSave = confirm('Test confirmation ' + bidStatus);
+
+            if (confirmSave == true) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
 
 
     }
