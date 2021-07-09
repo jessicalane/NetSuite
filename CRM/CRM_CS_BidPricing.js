@@ -57,6 +57,8 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
             rec.setValue('custrecord_pack', packSize);
             //TODO Create target price point field and set value here.
             rec.setValue('custrecord_grade', grade);
+            rec.setValue('custrecord_countryoforigin', countryOrig);
+            rec.setValue('')
         });  
         
 
