@@ -47,6 +47,7 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
                 var targetPrice = result.getValue('custcol_targetpricepoint');
                 var grade = result.getValue('custcol_productgrade');
                 var countryOrig = result.getValue('custcol_countryoforigin');
+                var volume = result.getValue('custcol_volume');
                 var datingGuide = result.getValue('custcol_datingguidelinesrestrictions');
                 var shelfLife = result.getValue('custcol_shelfliferequirements');
                 var nutritional = result.getValue('custcol_nutritionalrequirements');
@@ -60,6 +61,7 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
                 rec.setValue('custrecord_targetpricepoint', targetPrice);
                 rec.setValue('custrecord_grade', grade);
                 rec.setValue('custrecord_countryoforigin', countryOrig);
+                rec.setValue('custrecord_volume', volume);
                 rec.setValue('custrecord_datingguidelinesrestrictions', datingGuide);
                 rec.setValue('custrecord_shelfliferequirements', shelfLife);
                 rec.setValue('custrecord_nutritionalrequirements', nutritional);
