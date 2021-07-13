@@ -12,6 +12,8 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
         var lineId = uniqueId.split('-')[1];
         var vendor = rec.getValue('custrecord_bidvendor');
 
+        //TODO find out if user.isbuyer=true and if so, then show the "new bid" button, otherwise, hide it.
+
         //If the record is new, then it will pull the values and set them on the Bid Pricing record.
         if (!vendor) {
 
@@ -32,10 +34,16 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
                     'custcol_targetpricepoint', //Target Price Point
                     'custcol_productgrade', //Grade
                     'custcol_countryoforigin', //Country of Origin
+                    'custcol_volume', //Volume
+                    'custcol_approvedbrands', //Approved Brands
+                    'custcol_alternativesallowed', //Alternatives Allowed
+                    'custcol_previousawardinfo', //Previous Award Info
                     'custcol_datingguidelinesrestrictions', //Dating Guidelines/Restrictions
                     'custcol_shelfliferequirements', //Shelf Life Requirements
                     'custcol_nutritionalrequirements', //Nutritional Requirements
                     'custcol_religiousrequirements', //Religious Requirements
+                    'custcol_samplesrequired', //Samples Required
+                    'custcol_sampledue', //Samples Due
                     'custcol_labelingrequirements', //Labeling Requirements
                     'custcol_vendoroptions' //Vendor Options
                 ]
@@ -48,10 +56,15 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
                 var grade = result.getValue('custcol_productgrade');
                 var countryOrig = result.getValue('custcol_countryoforigin');
                 var volume = result.getValue('custcol_volume');
+                var approvedBrands = result.getValue('custcol_approvedbrands');
+                var alternatives = result.getValue('custcol_alternativesallowed');
+                var prevAward = result.getValue('custcol_previousawardinfo');
                 var datingGuide = result.getValue('custcol_datingguidelinesrestrictions');
                 var shelfLife = result.getValue('custcol_shelfliferequirements');
                 var nutritional = result.getValue('custcol_nutritionalrequirements');
                 var religious = result.getValue('custcol_religiousrequirements');
+                var sampleReq = result.getValue('custcol_samplesrequired');
+                //var sampleDue = result.getValue('custcol_sampledue');
                 var labels = result.getValue('custcol_labelingrequirements');
                 var vendorOptions = result.getValue('custcol_vendoroptions');
                 
@@ -62,11 +75,17 @@ define(['N/currentRecord', 'N/search'], function(currentRecord, search) {
                 rec.setValue('custrecord_grade', grade);
                 rec.setValue('custrecord_countryoforigin', countryOrig);
                 rec.setValue('custrecord_volume', volume);
+                rec.setValue('custrecord_approvedbrands', approvedBrands);
+                rec.setValue('custrecord_alternativesallowed', alternatives);
+                rec.setValue('custrecord_previousawardinfo', prevAward);
                 rec.setValue('custrecord_datingguidelinesrestrictions', datingGuide);
                 rec.setValue('custrecord_shelfliferequirements', shelfLife);
                 rec.setValue('custrecord_nutritionalrequirements', nutritional);
                 rec.setValue('custrecord_religiousrequirements', religious);
-                rec.setValue('labelrequirements', labels);
+                rec.setValue('custrecord_samplesrequired', sampleReq);
+                //TODO sampledue not setting date because of incorrect formatting??
+                //rec.setValue('custrecord_samplesdue', sampleDue);
+                rec.setValue('custrecord_labelrequirements', labels);
                 rec.setValue('custrecord_vendoroptions', vendorOptions);
             });
 
